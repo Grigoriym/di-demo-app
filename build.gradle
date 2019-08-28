@@ -1,0 +1,90 @@
+buildscript {
+
+    ext.kotlinVersion = "1.3.41"
+    ext.gradleVersion = "3.4.1"
+    ext.mavenBaseUrl = "http://maven.madg.ftc.ru"
+
+    repositories {
+        jcenter()
+        google()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
+    }
+}
+
+ext {
+    minApiVersion = 19
+    maxApiVersion = 28
+    aptVersion = "28.0.3"
+
+    appVersionName = "1.0.0"
+    appVersionCode = 1
+
+    timberVersion = "4.6.1"
+
+    junitVersion = "4.12"
+
+    appcompatVersion = "1.0.2"
+    materialVersion = "1.0.0"
+    constraintVersion = "1.1.3"
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+subprojects {
+
+    if (project.name == 'app') {
+        apply plugin: 'com.android.application'
+    } else {
+        apply plugin: 'com.android.library'
+    }
+    apply plugin: 'kotlin-android'
+    apply plugin: 'kotlin-android-extensions'
+    apply plugin: 'kotlin-kapt'
+
+    android {
+
+        compileSdkVersion maxApiVersion
+        buildToolsVersion aptVersion
+
+        defaultConfig {
+
+            minSdkVersion minApiVersion
+            targetSdkVersion maxApiVersion
+
+            if (project.name == 'app') {
+                applicationVariants.all { variant ->
+                    variant.outputs.all {
+                        outputFileName = "app-${variant.name}-${variant.versionName}.apk"
+                    }
+                }
+            }
+        }
+
+    }
+
+    dependencies {
+
+        // Kotlin
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+        // Logging
+        implementation "com.jakewharton.timber:timber:$timberVersion"
+
+        // Unit tests
+        testImplementation "junit:junit:$junitVersion"
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
