@@ -1,6 +1,7 @@
 package ru.ftc.todoapp.app
 
 import android.app.Application
+import ru.ftc.todoapp.app.sl.*
 import ru.ftc.todoapp.data.Storage
 import ru.ftc.todoapp.data.StorageImpl
 import ru.ftc.todoapp.feature.login.data.LoginRepositoryImpl
@@ -13,38 +14,29 @@ import ru.ftc.todoapp.navigation.RouterImpl
 class App : Application() {
 
     companion object {
-        private lateinit var storage: Storage
 
-        private lateinit var taskRepository: TaskRepository
-        private lateinit var loginRepository: LoginRepository
-
-        lateinit var isLoggedInUseCase: IsLoggedInUseCase
-        lateinit var loginUseCase: LoginUseCase
-        lateinit var logoutUseCase: LogoutUseCase
-
-        lateinit var getTasksUseCase: GetTasksUseCase
-        lateinit var createTaskUseCase: CreateTaskUseCase
-        lateinit var deleteTaskUseCase: DeleteTaskUseCase
-        lateinit var updateTaskUseCase: UpdateTaskUseCase
-
-        val router: Router = RouterImpl()
+        lateinit var serviceLocator: ServiceLocator
     }
 
     override fun onCreate() {
         super.onCreate()
 
-        storage = StorageImpl(this)
+        serviceLocator = ServiceLocatorImpl(
+            Storage::class to InstanceProvider(StorageImpl(this@App)),
 
-        taskRepository = TaskRepositoryImpl(storage)
-        loginRepository = LoginRepositoryImpl(storage)
+            TaskRepository::class to Factory { TaskRepositoryImpl(get()) },
+            LoginRepository::class to Factory { LoginRepositoryImpl(get()) },
 
-        isLoggedInUseCase = IsLoggedInUseCaseImpl(loginRepository)
-        loginUseCase = LoginUseCaseImpl(loginRepository)
-        logoutUseCase = LogoutUseCaseImpl(loginRepository)
+            IsLoggedInUseCase::class to Factory { IsLoggedInUseCaseImpl(get()) },
+            LoginUseCase::class to Factory { LoginUseCaseImpl(get()) },
+            LogoutUseCase::class to Factory { LogoutUseCaseImpl(get()) },
 
-        getTasksUseCase = GetTasksUseCaseImpl(taskRepository)
-        createTaskUseCase = CreateTaskUseCaseImpl(taskRepository)
-        deleteTaskUseCase = DeleteTaskUseCaseImpl(taskRepository)
-        updateTaskUseCase = UpdateTaskUseCaseImpl(taskRepository)
+            GetTasksUseCase::class to Factory { GetTasksUseCaseImpl(get()) },
+            CreateTaskUseCase::class to Factory { CreateTaskUseCaseImpl(get()) },
+            DeleteTaskUseCase::class to Factory { DeleteTaskUseCaseImpl(get()) },
+            UpdateTaskUseCase::class to Factory { UpdateTaskUseCaseImpl(get()) },
+
+            Router::class to InstanceProvider(RouterImpl())
+        )
     }
 }

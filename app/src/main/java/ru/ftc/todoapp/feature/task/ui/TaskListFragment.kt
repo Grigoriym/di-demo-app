@@ -8,6 +8,9 @@ import kotlinx.android.synthetic.main.fragment_task_list.*
 import kotlinx.android.synthetic.main.toolbar_dark.*
 import ru.ftc.todoapp.R
 import ru.ftc.todoapp.app.App
+import ru.ftc.todoapp.app.sl.CachingFactory
+import ru.ftc.todoapp.app.sl.get
+import ru.ftc.todoapp.app.sl.serviceLocator
 import ru.ftc.todoapp.feature.task.domain.entity.Task
 import ru.ftc.todoapp.feature.task.presentation.TaskListPresenter
 import ru.ftc.todoapp.feature.task.presentation.TaskListPresenterImpl
@@ -22,7 +25,17 @@ class TaskListFragment : Fragment(), TaskListView {
             TaskListFragment()
     }
 
-    private lateinit var presenter: TaskListPresenter
+    private val presenter: TaskListPresenter by serviceLocator()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            App.serviceLocator.add(
+                TaskListPresenter::class,
+                CachingFactory { TaskListPresenterImpl(get(), get(), get(), get()) }
+            )
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_task_list, container, false)
@@ -33,12 +46,6 @@ class TaskListFragment : Fragment(), TaskListView {
         toolbar.title = getString(R.string.app_name)
         toolbar.inflateMenu(R.menu.menu_task_list)
 
-        presenter = TaskListPresenterImpl(
-            getTasksUseCase = App.getTasksUseCase,
-            deleteTaskUseCase = App.deleteTaskUseCase,
-            logoutUseCase = App.logoutUseCase,
-            router = App.router
-        )
         presenter.attachView(this)
 
         task_create.setOnClickListener { presenter.onAddClick() }

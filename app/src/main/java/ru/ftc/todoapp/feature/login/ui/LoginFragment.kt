@@ -9,6 +9,9 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.toolbar_dark.*
 import ru.ftc.todoapp.R
 import ru.ftc.todoapp.app.App
+import ru.ftc.todoapp.app.sl.CachingFactory
+import ru.ftc.todoapp.app.sl.get
+import ru.ftc.todoapp.app.sl.serviceLocator
 import ru.ftc.todoapp.feature.login.presentation.LoginPresenter
 import ru.ftc.todoapp.feature.login.presentation.LoginPresenterImpl
 import ru.ftc.todoapp.feature.login.presentation.LoginView
@@ -21,7 +24,14 @@ class LoginFragment : Fragment(), LoginView {
             LoginFragment()
     }
 
-    private lateinit var presenter: LoginPresenter
+    private val presenter: LoginPresenter by serviceLocator()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            App.serviceLocator.add(LoginPresenter::class, CachingFactory { LoginPresenterImpl(get(), get(), get()) })
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_login, container, false)
@@ -31,11 +41,6 @@ class LoginFragment : Fragment(), LoginView {
 
         toolbar.title = getString(R.string.login)
 
-        presenter = LoginPresenterImpl(
-            loginUseCase = App.loginUseCase,
-            isLoggedInUseCase = App.isLoggedInUseCase,
-            router = App.router
-        )
         presenter.attachView(this)
 
         login_enter.setOnClickListener {

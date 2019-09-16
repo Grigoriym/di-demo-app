@@ -4,9 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.ftc.todoapp.R
 import ru.ftc.todoapp.app.App
+import ru.ftc.todoapp.app.sl.get
+import ru.ftc.todoapp.app.sl.serviceLocator
 import ru.ftc.todoapp.feature.task.ui.TaskListFragment
+import ru.ftc.todoapp.navigation.Router
 
 class MainActivity : AppCompatActivity() {
+
+    private val router: Router by serviceLocator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,11 +27,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.router.setNavigator(MainNavigator(this))
+        router.setNavigator(MainNavigator(this))
     }
 
     override fun onPause() {
         super.onPause()
-        App.router.setNavigator(null)
+        router.setNavigator(null)
     }
 }
