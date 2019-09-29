@@ -1,11 +1,13 @@
 package ru.ftc.todoapp.feature.login.domain
 
+import javax.inject.Inject
+
 interface LoginUseCase {
 
     operator fun invoke(name: String, password: String): Boolean
 }
 
-class LoginUseCaseImpl(
+class LoginUseCaseImpl @Inject constructor(
     private val loginRepository: LoginRepository
 ): LoginUseCase {
 

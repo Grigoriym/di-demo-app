@@ -1,20 +1,21 @@
 package ru.ftc.todoapp.feature.task.ui
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import kotlinx.android.synthetic.main.fragment_task_list.*
 import kotlinx.android.synthetic.main.toolbar_dark.*
 import ru.ftc.todoapp.R
-import ru.ftc.todoapp.app.App
+import ru.ftc.todoapp.app.BaseFragment
 import ru.ftc.todoapp.feature.task.domain.entity.Task
 import ru.ftc.todoapp.feature.task.presentation.TaskListPresenter
-import ru.ftc.todoapp.feature.task.presentation.TaskListPresenterImpl
 import ru.ftc.todoapp.feature.task.presentation.TaskListView
-import ru.ftc.todoapp.navigation.Router
+import javax.inject.Inject
 
-class TaskListFragment : Fragment(), TaskListView {
+class TaskListFragment : BaseFragment(), TaskListView {
 
     companion object {
 
@@ -22,7 +23,8 @@ class TaskListFragment : Fragment(), TaskListView {
             TaskListFragment()
     }
 
-    private lateinit var presenter: TaskListPresenter
+    @Inject
+    lateinit var presenter: TaskListPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_task_list, container, false)
@@ -33,12 +35,6 @@ class TaskListFragment : Fragment(), TaskListView {
         toolbar.title = getString(R.string.app_name)
         toolbar.inflateMenu(R.menu.menu_task_list)
 
-        presenter = TaskListPresenterImpl(
-            getTasksUseCase = App.getTasksUseCase,
-            deleteTaskUseCase = App.deleteTaskUseCase,
-            logoutUseCase = App.logoutUseCase,
-            router = App.router
-        )
         presenter.attachView(this)
 
         task_create.setOnClickListener { presenter.onAddClick() }

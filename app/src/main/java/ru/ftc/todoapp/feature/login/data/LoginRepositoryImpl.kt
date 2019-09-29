@@ -2,8 +2,11 @@ package ru.ftc.todoapp.feature.login.data
 
 import ru.ftc.todoapp.data.Storage
 import ru.ftc.todoapp.feature.login.domain.LoginRepository
+import javax.inject.Inject
 
-class LoginRepositoryImpl(private val storage: Storage) : LoginRepository {
+class LoginRepositoryImpl @Inject constructor(
+    private val storage: Storage
+) : LoginRepository {
 
     private companion object {
         const val LOGGED_IN_KEY = "LOGGED_IN_KEY"

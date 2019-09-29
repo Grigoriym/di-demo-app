@@ -1,6 +1,8 @@
 package ru.ftc.todoapp.navigation
 
-class RouterImpl : Router {
+import javax.inject.Inject
+
+class RouterImpl @Inject constructor() : Router {
 
     private var navigator: Navigator? = null
 

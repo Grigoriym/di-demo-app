@@ -2,10 +2,13 @@ package ru.ftc.todoapp.feature.login.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.android.AndroidInjection
 import ru.ftc.todoapp.R
-import ru.ftc.todoapp.app.App
+import ru.ftc.todoapp.app.BaseActivity
+import ru.ftc.todoapp.navigation.Router
+import javax.inject.Inject
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,13 +22,16 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    @Inject
+    lateinit var router: Router
+
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.router.setNavigator(LoginNavigator(this))
+        router.setNavigator(LoginNavigator(this))
     }
 
     override fun onPause() {
         super.onPause()
-        App.router.setNavigator(null)
+        router.setNavigator(null)
     }
 }

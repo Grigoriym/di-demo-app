@@ -2,13 +2,14 @@ package ru.ftc.todoapp.feature.task.domain
 
 import ru.ftc.todoapp.feature.task.domain.entity.Task
 import java.util.*
+import javax.inject.Inject
 
 interface CreateTaskUseCase {
 
     operator fun invoke(description: String)
 }
 
-class CreateTaskUseCaseImpl(
+class CreateTaskUseCaseImpl @Inject constructor(
     private val taskRepository: TaskRepository
 ): CreateTaskUseCase {
 

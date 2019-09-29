@@ -8,13 +8,14 @@ import ru.ftc.todoapp.feature.task.domain.entity.Task
 import ru.ftc.todoapp.mvp.Presenter
 import ru.ftc.todoapp.navigation.Destination
 import ru.ftc.todoapp.navigation.Router
+import javax.inject.Inject
 
 abstract class LoginPresenter: Presenter<LoginView>() {
 
     abstract fun onLoginClick(name: String, password: String)
 }
 
-class LoginPresenterImpl(
+class LoginPresenterImpl @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val router: Router

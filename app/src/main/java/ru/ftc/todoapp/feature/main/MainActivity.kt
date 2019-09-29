@@ -1,12 +1,13 @@
 package ru.ftc.todoapp.feature.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import ru.ftc.todoapp.R
-import ru.ftc.todoapp.app.App
+import ru.ftc.todoapp.app.BaseActivity
 import ru.ftc.todoapp.feature.task.ui.TaskListFragment
+import ru.ftc.todoapp.navigation.Router
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,13 +21,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @Inject lateinit var router: Router
+
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.router.setNavigator(MainNavigator(this))
+        router.setNavigator(MainNavigator(this))
     }
 
     override fun onPause() {
         super.onPause()
-        App.router.setNavigator(null)
+        router.setNavigator(null)
     }
 }

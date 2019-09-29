@@ -4,8 +4,9 @@ import com.google.gson.Gson
 import ru.ftc.todoapp.data.Storage
 import ru.ftc.todoapp.feature.task.domain.TaskRepository
 import ru.ftc.todoapp.feature.task.domain.entity.Task
+import javax.inject.Inject
 
-class TaskRepositoryImpl(
+class TaskRepositoryImpl @Inject constructor(
     private val storage: Storage
 ) : TaskRepository {
 

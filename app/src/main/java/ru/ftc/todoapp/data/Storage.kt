@@ -2,6 +2,7 @@ package ru.ftc.todoapp.data
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import javax.inject.Inject
 
 interface Storage {
 
@@ -10,7 +11,7 @@ interface Storage {
     operator fun get(key: String): String?
 }
 
-class StorageImpl(
+class StorageImpl @Inject constructor(
     context: Context
 ) : Storage {
 

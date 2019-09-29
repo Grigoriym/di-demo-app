@@ -6,6 +6,7 @@ import ru.ftc.todoapp.feature.task.domain.entity.Task
 import ru.ftc.todoapp.mvp.Presenter
 import ru.ftc.todoapp.navigation.Destination
 import ru.ftc.todoapp.navigation.Router
+import javax.inject.Inject
 
 abstract class TaskPresenter : Presenter<TaskView>() {
 
@@ -14,7 +15,7 @@ abstract class TaskPresenter : Presenter<TaskView>() {
     abstract fun onBackClick()
 }
 
-class TaskPresenterImpl(
+class TaskPresenterImpl @Inject constructor(
     private val createTaskUseCase: CreateTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val router: Router,
