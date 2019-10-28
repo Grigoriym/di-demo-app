@@ -7,31 +7,54 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.android.synthetic.main.toolbar_dark.*
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.direct
+import org.kodein.di.generic.bind
+import org.kodein.di.generic.instance
+import org.kodein.di.generic.provider
 import ru.ftc.todoapp.R
-import ru.ftc.todoapp.app.App
 import ru.ftc.todoapp.feature.task.domain.entity.Task
 import ru.ftc.todoapp.feature.task.presentation.TaskPresenter
-import ru.ftc.todoapp.feature.task.presentation.TaskPresenterImpl
 import ru.ftc.todoapp.feature.task.presentation.TaskView
-import ru.ftc.todoapp.navigation.Router
+import ru.ftc.todoapp.feature.task.presentation.di.taskPresentationKodeinModule
 
-class TaskFragment : Fragment(), TaskView {
+class TaskFragment : Fragment(), TaskView, KodeinAware {
+    override lateinit var kodein: Kodein
 
     companion object {
 
-        fun newInstance(task: Task?): Fragment =
-            TaskFragment().apply {
-                arguments = Bundle().apply { this.task = task }
-            }
+        fun newInstance(task: Task): Fragment =
+            TaskFragment().apply { this.task = task}
     }
 
-    private var Bundle.task: Task?
-        get() = getSerializable("TASK") as? Task
-        set(value) = putSerializable("TASK", value)
+    private var task: Task
+        get() = (arguments?.getSerializable("TASK") as? Task) ?: Task()
+        set(value) { arguments = Bundle().apply { this.putSerializable("TASK", value)}}
+
+
+    private fun initKodein() {
+        kodein = Kodein {
+            extend((activity as KodeinAware).kodein)
+            import(taskPresentationKodeinModule)
+            bind<Fragment>() with provider { this@TaskFragment }
+            bind<Task>() with provider { this@TaskFragment.task }
+        }
+    }
+
 
     private lateinit var presenter: TaskPresenter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initKodein()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fragment_task, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,12 +66,7 @@ class TaskFragment : Fragment(), TaskView {
             presenter.onBackClick()
         }
 
-        presenter = TaskPresenterImpl(
-            createTaskUseCase = App.createTaskUseCase,
-            updateTaskUseCase = App.updateTaskUseCase,
-            router = App.router,
-            task = arguments?.task
-        )
+        presenter = direct.instance()
         presenter.attachView(this)
 
         task_save.setOnClickListener {
