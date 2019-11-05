@@ -8,13 +8,22 @@ import ru.ftc.todoapp.mvp.Presenter
 import ru.ftc.todoapp.navigation.Destination
 import ru.ftc.todoapp.navigation.Router
 
-abstract class TaskListPresenter: Presenter<TaskListView>() {
+interface TaskClickListener {
+    fun onTaskClick(task: Task)
+}
 
-    abstract fun onAddClick()
+interface TaskSwipeOutListener {
+    fun onTaskSwipe(task: Task)
+}
 
-    abstract fun onTaskClick(task: Task)
+interface AddTaskListener {
+    fun onAddClick()
+}
 
-    abstract fun onTaskSwipe(task: Task)
+abstract class TaskListPresenter : Presenter<TaskListView>(),
+    TaskClickListener,
+    TaskSwipeOutListener,
+    AddTaskListener {
 
     abstract fun exit()
 }
@@ -24,7 +33,7 @@ class TaskListPresenterImpl(
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val router: Router
-): TaskListPresenter() {
+) : TaskListPresenter() {
 
     override fun onViewAttach() {
         val tasks = getTasksUseCase()

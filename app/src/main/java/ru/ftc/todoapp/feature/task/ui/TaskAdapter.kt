@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.task_list_item.view.*
 import ru.ftc.todoapp.R
 import ru.ftc.todoapp.feature.task.domain.entity.Task
+import ru.ftc.todoapp.feature.task.presentation.TaskClickListener
+import ru.ftc.todoapp.feature.task.presentation.TaskSwipeOutListener
 
 class TaskAdapter(
-    private val clickListener: (Task) -> Unit,
-    private val swipeOutListener: (Task) -> Unit
+    private val clickListener: TaskClickListener,
+    private val swipeOutListener: TaskSwipeOutListener
 ) : RecyclerView.Adapter<TaskViewHolder>() {
 
     var items: List<Task> = listOf()
@@ -25,7 +27,7 @@ class TaskAdapter(
         items[position].id.hashCode().toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder =
-        TaskViewHolder(parent, clickListener, ::swipeOutItem)
+        TaskViewHolder(parent, clickListener::onTaskClick, ::swipeOutItem)
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(items[position])
@@ -35,7 +37,7 @@ class TaskAdapter(
         val swipedItem = items[position]
         items = items.minus(swipedItem)
         notifyItemRemoved(position)
-        swipeOutListener(swipedItem)
+        swipeOutListener.onTaskSwipe(swipedItem)
     }
 }
 

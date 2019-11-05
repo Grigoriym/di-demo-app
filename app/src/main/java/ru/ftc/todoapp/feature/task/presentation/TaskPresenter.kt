@@ -18,17 +18,17 @@ class TaskPresenterImpl(
     private val createTaskUseCase: CreateTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val router: Router,
-    private val task: Task?
+    private val task: Task
 ) : TaskPresenter() {
 
     override fun onViewAttach() {
-        if (task != null) {
+        if (!task.isEmpty) {
             view?.showTask(task)
         }
     }
 
     override fun onSaveClick(description: String) {
-        if (task != null) {
+        if (!task.isEmpty) {
             updateTaskUseCase(task.copy(description = description))
         } else {
             createTaskUseCase(description)
