@@ -1,13 +1,13 @@
-ext.appId = "ru.ftc.todoapp"
+apply from: "$rootDir/dependencies.gradle"
 
 android {
 
     defaultConfig {
 
-        versionCode appVersionCode
-        versionName appVersionName
+        versionCode configs.versionCode
+        versionName configs.versionName
 
-        applicationId appId
+        applicationId configs.applicationId
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -30,9 +30,9 @@ android {
 dependencies {
 
     //Android
-    implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    implementation "com.google.android.material:material:$materialVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintVersion"
+    implementation libs.appCompat
+    implementation libs.material
+    implementation libs.constraint
 
-    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation libs.gson
 }
