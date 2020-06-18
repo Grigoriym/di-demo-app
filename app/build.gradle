@@ -28,11 +28,10 @@ android {
 }
 
 dependencies {
+    implementation project(":core")
+    implementation project(":login")
+    implementation project(":task")
 
     //Android
     implementation libs.appCompat
-    implementation libs.material
-    implementation libs.constraint
-
-    implementation libs.gson
 }

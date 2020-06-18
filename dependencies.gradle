@@ -31,7 +31,7 @@ ext {
             "appCompat" : "androidx.appcompat:appcompat:$versions.appCompat",
             "constraint": "androidx.constraintlayout:constraintlayout:$versions.constraintlayout",
             "gson"      : "com.google.code.gson:gson:$versions.gson",
-            "kotlin"    : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+            "kotlin"    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
             "material"  : "com.google.android.material:material:$versions.material",
             "timber"    : "com.jakewharton.timber:timber:$versions.timber",
     ]
