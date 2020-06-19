@@ -13,9 +13,6 @@
             android:theme="@style/AppTheme">
 
         <activity
-                android:name=".task.ui.TaskActivity"/>
-
-        <activity
                 android:name=".login.ui.LoginActivity"
                 android:windowSoftInputMode="adjustResize">
 
