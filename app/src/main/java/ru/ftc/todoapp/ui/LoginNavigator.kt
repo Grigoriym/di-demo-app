@@ -6,6 +6,7 @@ import ru.ftc.todoapp.core.navigation.Destination
 import ru.ftc.todoapp.core.navigation.Navigator
 import ru.ftc.todoapp.navigation.Back
 import ru.ftc.todoapp.navigation.TaskList
+import ru.ftc.todoapp.task.ui.TaskActivity
 
 class LoginNavigator(private val activity: AppCompatActivity) : Navigator {
 
@@ -13,7 +14,7 @@ class LoginNavigator(private val activity: AppCompatActivity) : Navigator {
         when (destination) {
 
             TaskList -> {
-                activity.startActivity(Intent(activity.application, MainActivity::class.java))
+                activity.startActivity(Intent(activity.application, TaskActivity::class.java))
                 activity.finish()
             }
 

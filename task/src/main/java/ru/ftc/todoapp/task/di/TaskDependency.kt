@@ -1,5 +1,7 @@
 package ru.ftc.todoapp.task.di
 
+import androidx.appcompat.app.AppCompatActivity
+import ru.ftc.todoapp.core.navigation.Navigator
 import ru.ftc.todoapp.login.domain.LogoutUseCase
 import ru.ftc.todoapp.task.domain.CreateTaskUseCase
 import ru.ftc.todoapp.task.domain.DeleteTaskUseCase
@@ -20,4 +22,6 @@ interface TaskDependency {
     val logoutUseCase: LogoutUseCase
 
     val taskRouter: TaskRouter
+
+    fun createTaskNavigator(activity: AppCompatActivity): Navigator
 }

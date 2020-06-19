@@ -12,7 +12,7 @@ import ru.ftc.todoapp.navigation.Login
 import ru.ftc.todoapp.navigation.NewTask
 import ru.ftc.todoapp.task.ui.TaskFragment
 
-class MainNavigator(private val activity: AppCompatActivity) : Navigator {
+class TaskNavigator(private val activity: AppCompatActivity) : Navigator {
 
     override fun navigateTo(destination: Destination) {
         if (destination == Login) {

@@ -19,6 +19,7 @@ import ru.ftc.todoapp.task.di.TaskDependency
 import ru.ftc.todoapp.task.domain.*
 import ru.ftc.todoapp.task.presentation.TaskRouter
 import ru.ftc.todoapp.ui.LoginNavigator
+import ru.ftc.todoapp.ui.TaskNavigator
 
 class App : Application(), CoreDependency, LoginDependency, TaskDependency {
 
@@ -91,6 +92,9 @@ class App : Application(), CoreDependency, LoginDependency, TaskDependency {
 
     override val taskRouter: TaskRouter
         get() = _taskRouter
+
+    override fun createTaskNavigator(activity: AppCompatActivity): Navigator =
+        TaskNavigator(activity)
 
     override fun createLoginNavigator(activity: AppCompatActivity): Navigator =
         LoginNavigator(activity)

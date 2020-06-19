@@ -1,14 +1,17 @@
-package ru.ftc.todoapp.ui
+package ru.ftc.todoapp.task.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import ru.ftc.todoapp.R
 import ru.ftc.todoapp.core.di.CoreDependency
-import ru.ftc.todoapp.task.ui.TaskListFragment
+import ru.ftc.todoapp.task.R
+import ru.ftc.todoapp.task.di.TaskDependency
 
-class MainActivity : AppCompatActivity() {
+class TaskActivity : AppCompatActivity() {
 
     // FIXME Dependencies from App
+    private val taskDependency: TaskDependency
+        get() = application as TaskDependency
+
     private val coreDependency: CoreDependency
         get() = application as CoreDependency
 
@@ -27,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResumeFragments() {
         super.onResumeFragments()
         // FIXME Providing dependencies from App
-        coreDependency.router.setNavigator(MainNavigator(this))
+        coreDependency.router.setNavigator(taskDependency.createTaskNavigator(this))
     }
 
     override fun onPause() {
