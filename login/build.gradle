@@ -1,0 +1,8 @@
+apply from: "$rootDir/dependencies.gradle"
+
+dependencies {
+    implementation project(":core")
+
+    implementation libs.appCompat
+    implementation libs.material
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.ftc.todoapp.login">
+
+    <application>
+        <activity
+            android:name=".ui.LoginActivity"
+            android:windowSoftInputMode="adjustResize"/>
+    </application>
+
+</manifest>

@@ -1,16 +1,14 @@
 package ru.ftc.todoapp.navigation
 
-import ru.ftc.todoapp.feature.task.domain.entity.Task
+import ru.ftc.todoapp.core.navigation.Destination
+import ru.ftc.todoapp.task.domain.entity.Task
 
-sealed class Destination {
+object Back : Destination
 
-    object Back : Destination()
+object NewTask : Destination
 
-    object NewTask : Destination()
+object TaskList : Destination
 
-    object TaskList : Destination()
+object Login : Destination
 
-    object Login : Destination()
-
-    data class EditTask(val task: Task) : Destination()
-}
+data class EditTask(val task: Task) : Destination
