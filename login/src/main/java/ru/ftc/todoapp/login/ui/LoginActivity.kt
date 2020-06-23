@@ -2,18 +2,31 @@ package ru.ftc.todoapp.login.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import ru.ftc.todoapp.core.di.CoreDependency
+import org.koin.android.ext.android.getKoin
+import org.koin.core.context.loadKoinModules
+import org.koin.core.parameter.parametersOf
+import ru.ftc.todoapp.core.navigation.Navigator
+import ru.ftc.todoapp.core.navigation.Router
 import ru.ftc.todoapp.login.R
-import ru.ftc.todoapp.login.di.LoginDependency
+import ru.ftc.todoapp.login.di.loginModule
+import ru.ftc.todoapp.login.di.loginQualifier
 
 class LoginActivity : AppCompatActivity() {
 
-    // FIXME Dependencies from App
-    private val loginDependency: LoginDependency
-        get() = application as LoginDependency
+    internal val featureScope by lazy {
+        getKoin().getOrCreateScope(toString(), loginQualifier)
+    }
 
-    private val coreDependency: CoreDependency
-        get() = application as CoreDependency
+    private val router: Router by lazy {
+        featureScope.get<Router>()
+    }
+
+    private val loginNavigator: Navigator
+        get() {
+            return featureScope.get<LoginNavigator> {
+                parametersOf(this@LoginActivity)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,16 +40,20 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-
-        // FIXME Switch navigator in App on LoginNavigator
-        coreDependency.router.setNavigator(loginDependency.createLoginNavigator(this))
+    override fun onResume() {
+        super.onResume()
+        router.setNavigator(navigator = loginNavigator)
     }
 
     override fun onPause() {
         super.onPause()
-        // FIXME Clear navigator in App
-        coreDependency.router.setNavigator(null)
+        router.setNavigator(null)
+    }
+
+    companion object {
+
+        init {
+            loadKoinModules(loginModule)
+        }
     }
 }

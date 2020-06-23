@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import kotlinx.android.synthetic.main.fragment_task_list.*
 import ru.ftc.todoapp.core.synthetic.exported.exported_toolbar
 import ru.ftc.todoapp.task.R
-import ru.ftc.todoapp.task.di.TaskDependency
 import ru.ftc.todoapp.task.domain.entity.Task
 import ru.ftc.todoapp.task.presentation.TaskListPresenter
-import ru.ftc.todoapp.task.presentation.TaskListPresenterImpl
 import ru.ftc.todoapp.task.presentation.TaskListView
 
 class TaskListFragment : Fragment(), TaskListView {
@@ -23,11 +21,9 @@ class TaskListFragment : Fragment(), TaskListView {
             TaskListFragment()
     }
 
-    // FIXME Dependencies from App
-    private val dependency: TaskDependency
-        get() = activity?.application as TaskDependency
-
-    private lateinit var presenter: TaskListPresenter
+    private val presenter: TaskListPresenter by lazy {
+        (requireActivity() as TaskActivity).featureScope.get<TaskListPresenter>()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_task_list, container, false)
@@ -37,14 +33,6 @@ class TaskListFragment : Fragment(), TaskListView {
 
         exported_toolbar.title = getString(R.string.app_name)
         exported_toolbar.inflateMenu(R.menu.menu_task_list)
-
-        // TODO Providing dependencies from App
-        presenter = TaskListPresenterImpl(
-            getTasksUseCase = dependency.getTasksUseCase,
-            deleteTaskUseCase = dependency.deleteTaskUseCase,
-            logoutUseCase = dependency.logoutUseCase,
-            router = dependency.taskRouter
-        )
         presenter.attachView(this)
 
         task_create.setOnClickListener { presenter.onAddClick() }

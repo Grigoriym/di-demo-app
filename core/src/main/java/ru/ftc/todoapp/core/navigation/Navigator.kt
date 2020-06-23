@@ -2,5 +2,5 @@ package ru.ftc.todoapp.core.navigation
 
 interface Navigator {
 
-    fun navigateTo(destination: Destination)
+    fun navigateTo(destination: Destination): Boolean
 }

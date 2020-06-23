@@ -2,4 +2,6 @@ apply from: "$rootDir/dependencies.gradle"
 
 dependencies {
     implementation libs.appCompat
+
+    implementation libs.koinAndroid
 }

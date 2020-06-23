@@ -8,24 +8,19 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.ftc.todoapp.core.synthetic.exported.exported_toolbar
 import ru.ftc.todoapp.login.R
-import ru.ftc.todoapp.login.di.LoginDependency
 import ru.ftc.todoapp.login.presentation.LoginPresenter
-import ru.ftc.todoapp.login.presentation.LoginPresenterImpl
 import ru.ftc.todoapp.login.presentation.LoginView
 
 class LoginFragment : Fragment(), LoginView {
 
     companion object {
 
-        fun newInstance(): Fragment =
-            LoginFragment()
+        fun newInstance(): Fragment = LoginFragment()
     }
 
-    // FIXME Dependencies from App
-    private val dependency: LoginDependency
-        get() = activity?.application as LoginDependency
-
-    private lateinit var presenter: LoginPresenter
+    private val presenter: LoginPresenter by lazy {
+        (requireActivity() as LoginActivity).featureScope.get<LoginPresenter>()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_login, container, false)
@@ -36,11 +31,6 @@ class LoginFragment : Fragment(), LoginView {
         exported_toolbar.title = getString(R.string.login)
 
         // FIXME Providing dependencies from App
-        presenter = LoginPresenterImpl(
-            loginUseCase = dependency.loginUseCase,
-            isLoggedInUseCase = dependency.isLoggedInUseCase,
-            router = dependency.loginRouter
-        )
         presenter.attachView(this)
 
         login_enter.setOnClickListener {

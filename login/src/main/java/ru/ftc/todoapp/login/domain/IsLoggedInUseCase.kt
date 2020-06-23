@@ -9,6 +9,7 @@ class IsLoggedInUseCaseImpl(
     private val loginRepository: LoginRepository
 ) : IsLoggedInUseCase {
 
-    override fun invoke(): Boolean =
-        loginRepository.isLoggedIn()
+    override fun invoke(): Boolean {
+        return loginRepository.isLoggedIn()
+    }
 }

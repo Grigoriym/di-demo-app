@@ -1,8 +1,7 @@
-package ru.ftc.todoapp.presentation
+package ru.ftc.todoapp.login.presentation
 
 import ru.ftc.todoapp.core.navigation.Router
-import ru.ftc.todoapp.login.presentation.LoginRouter
-import ru.ftc.todoapp.navigation.TaskList
+import ru.ftc.todoapp.core.navigation.TaskList
 
 class LoginRouterImpl(private val router: Router) : LoginRouter {
 

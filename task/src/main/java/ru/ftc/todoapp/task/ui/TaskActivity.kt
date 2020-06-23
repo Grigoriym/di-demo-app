@@ -2,18 +2,29 @@ package ru.ftc.todoapp.task.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import ru.ftc.todoapp.core.di.CoreDependency
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
+import org.koin.core.context.loadKoinModules
+import org.koin.core.parameter.parametersOf
+import ru.ftc.todoapp.core.navigation.Navigator
+import ru.ftc.todoapp.core.navigation.Router
 import ru.ftc.todoapp.task.R
-import ru.ftc.todoapp.task.di.TaskDependency
+import ru.ftc.todoapp.task.di.taskModules
+import ru.ftc.todoapp.task.di.taskQualifier
 
 class TaskActivity : AppCompatActivity() {
 
-    // FIXME Dependencies from App
-    private val taskDependency: TaskDependency
-        get() = application as TaskDependency
+    internal val featureScope by lazy {
+        getKoin().getOrCreateScope(toString(), taskQualifier)
+    }
 
-    private val coreDependency: CoreDependency
-        get() = application as CoreDependency
+    private val router: Router by inject()
+    private val taskNavigator: Navigator
+        get() {
+            return featureScope.get<TaskNavigator> {
+                parametersOf(this@TaskActivity)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,15 +38,20 @@ class TaskActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        // FIXME Providing dependencies from App
-        coreDependency.router.setNavigator(taskDependency.createTaskNavigator(this))
+    override fun onResume() {
+        super.onResume()
+        router.setNavigator(navigator = taskNavigator)
     }
 
     override fun onPause() {
         super.onPause()
-        // FIXME Providing dependencies from App
-        coreDependency.router.setNavigator(null)
+        router.setNavigator(null)
+    }
+
+    companion object {
+
+        init {
+            loadKoinModules(taskModules)
+        }
     }
 }

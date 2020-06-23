@@ -5,4 +5,8 @@ dependencies {
 
     implementation libs.appCompat
     implementation libs.material
+
+    implementation libs.koinAndroid
+    implementation libs.koinAndroidxFragment
+    implementation libs.koinAndroidxViewmodel
 }

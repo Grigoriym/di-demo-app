@@ -7,4 +7,11 @@ dependencies {
     implementation libs.appCompat
     implementation libs.material
     implementation libs.gson
+
+    implementation libs.appCompat
+
+    implementation libs.koinAndroid
+    implementation libs.koinAndroidxFragment
+    implementation libs.koinAndroidxViewmodel
+    implementation libs.koinAndroidxScope
 }

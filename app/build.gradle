@@ -3,7 +3,6 @@ apply from: "$rootDir/dependencies.gradle"
 android {
 
     defaultConfig {
-
         versionCode configs.versionCode
         versionName configs.versionName
 
@@ -34,4 +33,9 @@ dependencies {
 
     //Android
     implementation libs.appCompat
+
+    implementation libs.koinAndroid
+    implementation libs.koinAndroidxFragment
+    implementation libs.koinAndroidxViewmodel
+    implementation libs.koinAndroidxScope
 }

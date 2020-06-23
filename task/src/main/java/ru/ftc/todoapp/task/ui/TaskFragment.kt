@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_task.*
+import org.koin.core.parameter.parametersOf
 import ru.ftc.todoapp.core.synthetic.exported.exported_toolbar
 import ru.ftc.todoapp.task.R
-import ru.ftc.todoapp.task.di.TaskDependency
 import ru.ftc.todoapp.task.domain.entity.Task
 import ru.ftc.todoapp.task.presentation.TaskPresenter
-import ru.ftc.todoapp.task.presentation.TaskPresenterImpl
 import ru.ftc.todoapp.task.presentation.TaskView
 
 class TaskFragment : Fragment(), TaskView {
@@ -28,11 +27,11 @@ class TaskFragment : Fragment(), TaskView {
         get() = getSerializable("TASK") as? Task
         set(value) = putSerializable("TASK", value)
 
-    // FIXME Dependencies from App
-    private val dependency: TaskDependency
-        get() = activity?.application as TaskDependency
-
-    private lateinit var presenter: TaskPresenter
+    private val presenter: TaskPresenter by lazy {
+        (requireActivity() as TaskActivity).featureScope.get<TaskPresenter> {
+            parametersOf(requireArguments().task)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_task, container, false)
@@ -46,13 +45,6 @@ class TaskFragment : Fragment(), TaskView {
             presenter.onBackClick()
         }
 
-        // TODO Providing dependencies from App
-        presenter = TaskPresenterImpl(
-            createTaskUseCase = dependency.createTaskUseCase,
-            updateTaskUseCase = dependency.updateTaskUseCase,
-            router = dependency.taskRouter,
-            task = arguments?.task
-        )
         presenter.attachView(this)
 
         task_save.setOnClickListener {
