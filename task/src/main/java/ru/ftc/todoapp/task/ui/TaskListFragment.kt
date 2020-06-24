@@ -14,6 +14,7 @@ import ru.ftc.todoapp.task.domain.entity.Task
 import ru.ftc.todoapp.task.presentation.TaskListPresenter
 import ru.ftc.todoapp.task.presentation.TaskListPresenterImpl
 import ru.ftc.todoapp.task.presentation.TaskListView
+import ru.ftc.todoapp.task.presentation.TaskRouter
 
 class TaskListFragment : Fragment(), TaskListView {
 
@@ -43,7 +44,7 @@ class TaskListFragment : Fragment(), TaskListView {
             getTasksUseCase = dependency.getTasksUseCase,
             deleteTaskUseCase = dependency.deleteTaskUseCase,
             logoutUseCase = dependency.logoutUseCase,
-            router = dependency.taskRouter
+            router = TaskRouter(activity!!, dependency.loginOpener)
         )
         presenter.attachView(this)
 

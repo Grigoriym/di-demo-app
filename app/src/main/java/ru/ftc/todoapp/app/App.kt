@@ -8,16 +8,16 @@ import ru.ftc.todoapp.core.di.CoreDependency
 import ru.ftc.todoapp.core.navigation.Navigator
 import ru.ftc.todoapp.core.navigation.Router
 import ru.ftc.todoapp.core.navigation.RouterImpl
-import ru.ftc.todoapp.login.data.LoginRepositoryImpl
+import ru.ftc.todoapp.login.api.TaskListOpener
 import ru.ftc.todoapp.login.di.LoginDependency
-import ru.ftc.todoapp.login.domain.*
-import ru.ftc.todoapp.login.presentation.LoginRouter
-import ru.ftc.todoapp.presentation.LoginRouterImpl
-import ru.ftc.todoapp.presentation.TaskRouterImpl
+import ru.ftc.todoapp.login.repo.data.LoginRepositoryImpl
+import ru.ftc.todoapp.login.repo.domain.*
+import ru.ftc.todoapp.presentation.LoginOpenerImpl
+import ru.ftc.todoapp.presentation.TaskListOpenerImpl
+import ru.ftc.todoapp.task.api.LoginOpener
 import ru.ftc.todoapp.task.data.TaskRepositoryImpl
 import ru.ftc.todoapp.task.di.TaskDependency
 import ru.ftc.todoapp.task.domain.*
-import ru.ftc.todoapp.task.presentation.TaskRouter
 import ru.ftc.todoapp.ui.LoginNavigator
 import ru.ftc.todoapp.ui.TaskNavigator
 
@@ -38,8 +38,8 @@ class App : Application(), CoreDependency, LoginDependency, TaskDependency {
     private lateinit var _updateTaskUseCase: UpdateTaskUseCase
 
     private lateinit var _router: Router
-    private lateinit var _loginRouter: LoginRouter
-    private lateinit var _taskRouter: TaskRouter
+    private lateinit var _taskListOpener: TaskListOpener
+    private lateinit var _loginOpener: LoginOpener
 
     override fun onCreate() {
         super.onCreate()
@@ -59,8 +59,8 @@ class App : Application(), CoreDependency, LoginDependency, TaskDependency {
         _updateTaskUseCase = UpdateTaskUseCaseImpl(_taskRepository)
 
         _router = RouterImpl()
-        _loginRouter = LoginRouterImpl(_router)
-        _taskRouter = TaskRouterImpl(_router)
+        _taskListOpener = TaskListOpenerImpl()
+        _loginOpener = LoginOpenerImpl()
     }
 
     override val router: Router
@@ -72,8 +72,8 @@ class App : Application(), CoreDependency, LoginDependency, TaskDependency {
     override val isLoggedInUseCase: IsLoggedInUseCase
         get() = _isLoggedInUseCase
 
-    override val loginRouter: LoginRouter
-        get() = _loginRouter
+    override val taskListOpener: TaskListOpener
+        get() = _taskListOpener
 
     override val getTasksUseCase: GetTasksUseCase
         get() = _getTasksUseCase
@@ -90,8 +90,8 @@ class App : Application(), CoreDependency, LoginDependency, TaskDependency {
     override val logoutUseCase: LogoutUseCase
         get() = _logoutUseCase
 
-    override val taskRouter: TaskRouter
-        get() = _taskRouter
+    override val loginOpener: LoginOpener
+        get() = _loginOpener
 
     override fun createTaskNavigator(activity: AppCompatActivity): Navigator =
         TaskNavigator(activity)

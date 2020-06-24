@@ -1,9 +1,10 @@
-package ru.ftc.todoapp.login.data
+package ru.ftc.todoapp.login.repo.data
 
 import ru.ftc.todoapp.core.data.Storage
-import ru.ftc.todoapp.login.domain.LoginRepository
+import ru.ftc.todoapp.login.repo.domain.LoginRepository
 
-class LoginRepositoryImpl(private val storage: Storage) : LoginRepository {
+class LoginRepositoryImpl(private val storage: Storage) :
+    LoginRepository {
 
     private companion object {
         const val LOGGED_IN_KEY = "LOGGED_IN_KEY"

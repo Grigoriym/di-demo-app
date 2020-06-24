@@ -11,6 +11,7 @@ import ru.ftc.todoapp.login.R
 import ru.ftc.todoapp.login.di.LoginDependency
 import ru.ftc.todoapp.login.presentation.LoginPresenter
 import ru.ftc.todoapp.login.presentation.LoginPresenterImpl
+import ru.ftc.todoapp.login.presentation.LoginRouter
 import ru.ftc.todoapp.login.presentation.LoginView
 
 class LoginFragment : Fragment(), LoginView {
@@ -39,7 +40,7 @@ class LoginFragment : Fragment(), LoginView {
         presenter = LoginPresenterImpl(
             loginUseCase = dependency.loginUseCase,
             isLoggedInUseCase = dependency.isLoggedInUseCase,
-            router = dependency.loginRouter
+            router = LoginRouter(activity!!, dependency.taskListOpener)
         )
         presenter.attachView(this)
 
