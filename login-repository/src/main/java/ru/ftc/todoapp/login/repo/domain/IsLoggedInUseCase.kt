@@ -1,4 +1,4 @@
-package ru.ftc.todoapp.login.domain
+package ru.ftc.todoapp.login.repo.domain
 
 interface IsLoggedInUseCase {
 

@@ -1,6 +1,14 @@
 package ru.ftc.todoapp.login.presentation
 
-interface LoginRouter {
+import androidx.fragment.app.FragmentActivity
+import ru.ftc.todoapp.login.api.TaskListOpener
 
-    fun openTaskList()
+internal class LoginRouter(
+    private val appCompatActivity: FragmentActivity,
+    private val taskListOpener: TaskListOpener
+) {
+
+    fun openTaskList() {
+        taskListOpener.openTaskList(appCompatActivity)
+    }
 }

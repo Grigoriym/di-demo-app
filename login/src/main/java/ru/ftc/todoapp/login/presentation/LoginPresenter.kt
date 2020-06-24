@@ -1,21 +1,19 @@
 package ru.ftc.todoapp.login.presentation
 
-import ru.ftc.todoapp.login.domain.IsLoggedInUseCase
-import ru.ftc.todoapp.login.domain.LoginUseCase
 import ru.ftc.todoapp.core.mvp.Presenter
-import ru.ftc.todoapp.core.navigation.Destination
-import ru.ftc.todoapp.core.navigation.Router
+import ru.ftc.todoapp.login.repo.domain.IsLoggedInUseCase
+import ru.ftc.todoapp.login.repo.domain.LoginUseCase
 
-abstract class LoginPresenter: Presenter<LoginView>() {
+abstract class LoginPresenter : Presenter<LoginView>() {
 
     abstract fun onLoginClick(name: String, password: String)
 }
 
-class LoginPresenterImpl(
+internal class LoginPresenterImpl(
     private val loginUseCase: LoginUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val router: LoginRouter
-): LoginPresenter() {
+) : LoginPresenter() {
 
     override fun onViewAttach() {
         if (isLoggedInUseCase()) {

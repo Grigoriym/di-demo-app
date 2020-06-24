@@ -2,7 +2,7 @@ apply from: "$rootDir/dependencies.gradle"
 
 dependencies {
     implementation project(":core")
-    implementation project(":login")
+    implementation project(":login-repository")
 
     implementation libs.appCompat
     implementation libs.material

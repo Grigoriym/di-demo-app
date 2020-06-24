@@ -1,14 +1,39 @@
 package ru.ftc.todoapp.task.presentation
 
+import androidx.fragment.app.FragmentActivity
+import ru.ftc.todoapp.task.R
+import ru.ftc.todoapp.task.api.LoginOpener
 import ru.ftc.todoapp.task.domain.entity.Task
+import ru.ftc.todoapp.task.ui.TaskFragment
 
-interface TaskRouter {
+class TaskRouter(
+    private val activity: FragmentActivity,
+    private val loginOpener: LoginOpener
+) {
 
-    fun back()
+    fun back() {
+        if (activity.supportFragmentManager.backStackEntryCount > 1) {
+            activity.supportFragmentManager.popBackStack()
+        } else {
+            activity.onBackPressed()
+        }
+    }
 
-    fun openNewTask()
+    fun openNewTask() {
+        activity.supportFragmentManager.beginTransaction()
+            .replace(R.id.content_frame, TaskFragment.newInstance(null))
+            .addToBackStack(null)
+            .commit()
+    }
 
-    fun openEditTask(task: Task)
+    fun openEditTask(task: Task) {
+        activity.supportFragmentManager.beginTransaction()
+            .replace(R.id.content_frame, TaskFragment.newInstance(task))
+            .addToBackStack(null)
+            .commit()
+    }
 
-    fun openLogin()
+    fun openLogin() {
+        loginOpener.openLogin(activity)
+    }
 }

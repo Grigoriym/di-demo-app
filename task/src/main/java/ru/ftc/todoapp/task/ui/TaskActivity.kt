@@ -26,16 +26,4 @@ class TaskActivity : AppCompatActivity() {
                 .commit()
         }
     }
-
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        // FIXME Providing dependencies from App
-        coreDependency.router.setNavigator(taskDependency.createTaskNavigator(this))
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // FIXME Providing dependencies from App
-        coreDependency.router.setNavigator(null)
-    }
 }

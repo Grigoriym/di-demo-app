@@ -1,12 +1,12 @@
 package ru.ftc.todoapp.task.presentation
 
 import ru.ftc.todoapp.core.mvp.Presenter
-import ru.ftc.todoapp.login.domain.LogoutUseCase
+import ru.ftc.todoapp.login.repo.domain.LogoutUseCase
 import ru.ftc.todoapp.task.domain.DeleteTaskUseCase
 import ru.ftc.todoapp.task.domain.GetTasksUseCase
 import ru.ftc.todoapp.task.domain.entity.Task
 
-abstract class TaskListPresenter: Presenter<TaskListView>() {
+abstract class TaskListPresenter : Presenter<TaskListView>() {
 
     abstract fun onAddClick()
 
@@ -22,7 +22,7 @@ class TaskListPresenterImpl(
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val router: TaskRouter
-): TaskListPresenter() {
+) : TaskListPresenter() {
 
     override fun onViewAttach() {
         val tasks = getTasksUseCase()

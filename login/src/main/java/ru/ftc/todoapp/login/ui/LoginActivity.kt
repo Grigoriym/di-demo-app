@@ -27,16 +27,4 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-
-        // FIXME Switch navigator in App on LoginNavigator
-        coreDependency.router.setNavigator(loginDependency.createLoginNavigator(this))
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // FIXME Clear navigator in App
-        coreDependency.router.setNavigator(null)
-    }
 }

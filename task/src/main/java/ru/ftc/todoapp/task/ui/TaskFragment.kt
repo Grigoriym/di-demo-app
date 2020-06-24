@@ -12,6 +12,7 @@ import ru.ftc.todoapp.task.di.TaskDependency
 import ru.ftc.todoapp.task.domain.entity.Task
 import ru.ftc.todoapp.task.presentation.TaskPresenter
 import ru.ftc.todoapp.task.presentation.TaskPresenterImpl
+import ru.ftc.todoapp.task.presentation.TaskRouter
 import ru.ftc.todoapp.task.presentation.TaskView
 
 class TaskFragment : Fragment(), TaskView {
@@ -50,7 +51,7 @@ class TaskFragment : Fragment(), TaskView {
         presenter = TaskPresenterImpl(
             createTaskUseCase = dependency.createTaskUseCase,
             updateTaskUseCase = dependency.updateTaskUseCase,
-            router = dependency.taskRouter,
+            router = TaskRouter(activity!!, dependency.loginOpener),
             task = arguments?.task
         )
         presenter.attachView(this)
