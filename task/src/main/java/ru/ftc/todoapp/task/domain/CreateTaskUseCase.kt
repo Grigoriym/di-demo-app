@@ -1,18 +1,17 @@
 package ru.ftc.todoapp.task.domain
 
+import dagger.Reusable
+import ru.ftc.todoapp.task.data.TaskRepository
 import ru.ftc.todoapp.task.domain.entity.Task
 import java.util.*
+import javax.inject.Inject
 
-interface CreateTaskUseCase {
-
-    operator fun invoke(description: String)
-}
-
-class CreateTaskUseCaseImpl(
+@Reusable
+class CreateTaskUseCase @Inject constructor(
     private val taskRepository: TaskRepository
-): CreateTaskUseCase {
+) {
 
-    override fun invoke(description: String) {
+    operator fun invoke(description: String) {
         val task = Task(
             id = UUID.randomUUID(),
             description = description

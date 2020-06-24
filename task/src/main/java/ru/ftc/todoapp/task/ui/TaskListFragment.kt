@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import kotlinx.android.synthetic.main.fragment_task_list.*
 import ru.ftc.todoapp.core.synthetic.exported.exported_toolbar
 import ru.ftc.todoapp.task.R
+import ru.ftc.todoapp.task.di.DaggerTaskComponent
 import ru.ftc.todoapp.task.di.TaskDependency
 import ru.ftc.todoapp.task.domain.entity.Task
 import ru.ftc.todoapp.task.presentation.TaskListPresenter
-import ru.ftc.todoapp.task.presentation.TaskListPresenterImpl
 import ru.ftc.todoapp.task.presentation.TaskListView
-import ru.ftc.todoapp.task.presentation.TaskRouter
+import javax.inject.Inject
+import javax.inject.Provider
 
 class TaskListFragment : Fragment(), TaskListView {
 
@@ -24,13 +25,29 @@ class TaskListFragment : Fragment(), TaskListView {
             TaskListFragment()
     }
 
-    // FIXME Dependencies from App
-    private val dependency: TaskDependency
-        get() = activity?.application as TaskDependency
+    @Inject
+    internal lateinit var presenter: TaskListPresenter
+    @Inject
+    internal lateinit var itemTouchHelper: Provider<ItemTouchHelper>
+    @Inject
+    internal lateinit var adapter: Provider<TaskAdapter>
 
-    private lateinit var presenter: TaskListPresenter
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        DaggerTaskComponent.factory()
+            .create(
+                activity!!,
+                null,
+                (activity?.application as TaskDependency.DepProvider).taskDependency()
+            )
+            .inject(this)
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fragment_task_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,13 +56,6 @@ class TaskListFragment : Fragment(), TaskListView {
         exported_toolbar.title = getString(R.string.app_name)
         exported_toolbar.inflateMenu(R.menu.menu_task_list)
 
-        // TODO Providing dependencies from App
-        presenter = TaskListPresenterImpl(
-            getTasksUseCase = dependency.getTasksUseCase,
-            deleteTaskUseCase = dependency.deleteTaskUseCase,
-            logoutUseCase = dependency.logoutUseCase,
-            router = TaskRouter(activity!!, dependency.loginOpener)
-        )
         presenter.attachView(this)
 
         task_create.setOnClickListener { presenter.onAddClick() }
@@ -61,10 +71,10 @@ class TaskListFragment : Fragment(), TaskListView {
     }
 
     override fun showTasks(tasks: List<Task>) {
-        val adapter = TaskAdapter(presenter::onTaskClick, presenter::onTaskSwipe)
+        val adapter = adapter.get()
         adapter.items = tasks
         task_recycler.adapter = adapter
 
-        ItemTouchHelper(TaskListTouchCallback()).attachToRecyclerView(task_recycler)
+        itemTouchHelper.get().attachToRecyclerView(task_recycler)
     }
 }

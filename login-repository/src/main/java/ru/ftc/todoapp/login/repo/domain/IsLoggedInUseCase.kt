@@ -1,14 +1,12 @@
 package ru.ftc.todoapp.login.repo.domain
 
-interface IsLoggedInUseCase {
+import ru.ftc.todoapp.login.repo.data.LoginRepository
+import javax.inject.Inject
 
-    operator fun invoke(): Boolean
-}
-
-class IsLoggedInUseCaseImpl(
+class IsLoggedInUseCase @Inject constructor(
     private val loginRepository: LoginRepository
-) : IsLoggedInUseCase {
+) {
 
-    override fun invoke(): Boolean =
+    operator fun invoke(): Boolean =
         loginRepository.isLoggedIn()
 }

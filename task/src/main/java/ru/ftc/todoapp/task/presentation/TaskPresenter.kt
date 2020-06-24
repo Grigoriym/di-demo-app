@@ -4,20 +4,14 @@ import ru.ftc.todoapp.core.mvp.Presenter
 import ru.ftc.todoapp.task.domain.CreateTaskUseCase
 import ru.ftc.todoapp.task.domain.UpdateTaskUseCase
 import ru.ftc.todoapp.task.domain.entity.Task
+import javax.inject.Inject
 
-abstract class TaskPresenter : Presenter<TaskView>() {
-
-    abstract fun onSaveClick(description: String)
-
-    abstract fun onBackClick()
-}
-
-class TaskPresenterImpl(
+class TaskPresenter @Inject constructor(
     private val createTaskUseCase: CreateTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val router: TaskRouter,
     private val task: Task?
-) : TaskPresenter() {
+) :  Presenter<TaskView>() {
 
     override fun onViewAttach() {
         if (task != null) {
@@ -25,7 +19,7 @@ class TaskPresenterImpl(
         }
     }
 
-    override fun onSaveClick(description: String) {
+    fun onSaveClick(description: String) {
         if (task != null) {
             updateTaskUseCase(task.copy(description = description))
         } else {
@@ -34,7 +28,7 @@ class TaskPresenterImpl(
         router.back()
     }
 
-    override fun onBackClick() {
+    fun onBackClick() {
         router.back()
     }
 }

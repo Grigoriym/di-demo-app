@@ -1,7 +1,20 @@
 package ru.ftc.todoapp.core.data
 
-import android.content.Context
+import android.app.Application
 import android.content.Context.MODE_PRIVATE
+import dagger.Binds
+import dagger.Module
+import javax.inject.Inject
+import javax.inject.Scope
+
+@Scope
+annotation class StorageScope
+
+@Module
+abstract class StorageModule {
+    @Binds
+    internal abstract fun bind(storage: StorageImpl): Storage
+}
 
 interface Storage {
 
@@ -10,8 +23,9 @@ interface Storage {
     operator fun get(key: String): String?
 }
 
-class StorageImpl(
-    context: Context
+@StorageScope
+internal class StorageImpl @Inject constructor(
+    context: Application
 ) : Storage {
 
     private companion object {

@@ -2,18 +2,43 @@ package ru.ftc.todoapp.login.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import ru.ftc.todoapp.core.di.CoreDependency
+import androidx.fragment.app.FragmentActivity
+import dagger.BindsInstance
+import dagger.Component
+import ru.ftc.todoapp.core.data.Storage
 import ru.ftc.todoapp.login.R
-import ru.ftc.todoapp.login.di.LoginDependency
+import ru.ftc.todoapp.login.api.TaskListOpener
 
-class LoginActivity : AppCompatActivity() {
+interface LoginActivityDependency {
+    interface DepProvider {
+        fun getLoginFragmentDependency(): LoginActivityDependency
+    }
 
-    // FIXME Dependencies from App
-    private val loginDependency: LoginDependency
-        get() = application as LoginDependency
+    fun storage(): Storage
+    fun taskListOpener(): TaskListOpener
+}
 
-    private val coreDependency: CoreDependency
-        get() = application as CoreDependency
+@Component(dependencies = [LoginActivityDependency::class])
+internal interface LoginActivityComponent: LoginFragmentDependency {
+    @Component.Factory
+    interface Factory {
+        fun create(
+            @BindsInstance activity: FragmentActivity,
+            dep: LoginActivityDependency
+        ): LoginActivityComponent
+    }
+}
+
+class LoginActivity : AppCompatActivity(), LoginFragmentDependency.Provider {
+
+    private val component by lazy {
+        DaggerLoginActivityComponent
+            .factory()
+            .create(
+                this,
+                (application as LoginActivityDependency.DepProvider).getLoginFragmentDependency()
+            )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,5 +51,7 @@ class LoginActivity : AppCompatActivity() {
                 .commit()
         }
     }
+
+    override fun getLoginFragmentDependency(): LoginFragmentDependency = component
 
 }

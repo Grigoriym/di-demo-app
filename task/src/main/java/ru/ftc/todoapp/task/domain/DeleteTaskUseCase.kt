@@ -1,17 +1,14 @@
 package ru.ftc.todoapp.task.domain
 
+import ru.ftc.todoapp.task.data.TaskRepository
 import ru.ftc.todoapp.task.domain.entity.Task
+import javax.inject.Inject
 
-interface DeleteTaskUseCase {
-
-    operator fun invoke(task: Task)
-}
-
-class DeleteTaskUseCaseImpl(
+class DeleteTaskUseCase @Inject constructor(
     private val taskRepository: TaskRepository
-): DeleteTaskUseCase {
+) {
 
-    override fun invoke(task: Task) {
+    operator fun invoke(task: Task) {
         taskRepository.delete(task)
     }
 }

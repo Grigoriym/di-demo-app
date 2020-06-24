@@ -1,16 +1,13 @@
 package ru.ftc.todoapp.task.domain
 
+import ru.ftc.todoapp.task.data.TaskRepository
 import ru.ftc.todoapp.task.domain.entity.Task
+import javax.inject.Inject
 
-interface GetTasksUseCase {
-
-    operator fun invoke(): List<Task>
-}
-
-class GetTasksUseCaseImpl(
+class GetTasksUseCase @Inject constructor(
     private val taskRepository: TaskRepository
-): GetTasksUseCase {
+) {
 
-    override fun invoke(): List<Task> =
+    operator fun invoke(): List<Task> =
         taskRepository.get()
 }

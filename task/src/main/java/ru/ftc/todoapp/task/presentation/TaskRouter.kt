@@ -5,8 +5,9 @@ import ru.ftc.todoapp.task.R
 import ru.ftc.todoapp.task.api.LoginOpener
 import ru.ftc.todoapp.task.domain.entity.Task
 import ru.ftc.todoapp.task.ui.TaskFragment
+import javax.inject.Inject
 
-class TaskRouter(
+class TaskRouter @Inject constructor(
     private val activity: FragmentActivity,
     private val loginOpener: LoginOpener
 ) {

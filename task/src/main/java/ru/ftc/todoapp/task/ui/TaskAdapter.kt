@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.task_list_item.view.*
 import ru.ftc.todoapp.task.R
 import ru.ftc.todoapp.task.domain.entity.Task
+import ru.ftc.todoapp.task.presentation.TaskListPresenter
+import javax.inject.Inject
 
-class TaskAdapter(
-    private val clickListener: (Task) -> Unit,
-    private val swipeOutListener: (Task) -> Unit
-) : RecyclerView.Adapter<TaskViewHolder>() {
+class TaskAdapter @Inject constructor(presenter: TaskListPresenter) : RecyclerView.Adapter<TaskViewHolder>() {
+
+    private val clickListener = presenter::onTaskClick
+    private val swipeOutListener = presenter::onTaskSwipe
 
     var items: List<Task> = listOf()
 

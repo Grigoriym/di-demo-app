@@ -55,6 +55,9 @@ subprojects {
 
     dependencies {
 
+        api libs.dagger
+        kapt libs.daggerCompiler
+
         // Kotlin
         implementation libs.kotlin
 
