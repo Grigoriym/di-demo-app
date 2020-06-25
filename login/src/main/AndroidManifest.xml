@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.ftc.todoapp.login">
 
-    <application>
+    <application
+        >
         <activity
             android:name=".ui.LoginActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:windowBackground="@drawable/dagger_koin"
+            />
     </application>
 
 </manifest>

@@ -43,6 +43,8 @@ class LoginActivity : AppCompatActivity(), LoginFragmentDependency.Provider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Thread.sleep(500)
+
         setContentView(R.layout.activity_frame)
 
         if (savedInstanceState == null) {
