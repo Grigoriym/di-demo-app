@@ -1,4 +1,10 @@
 apply from: "$rootDir/dependencies.gradle"
+apply plugin: "scabbard.gradle"
+
+scabbard {
+    enabled true
+    outputFormat "png"
+}
 
 android {
 
